@@ -4,16 +4,32 @@
 
 Este despliegue usa el Dockerfile existente del repositorio y publica React y FastAPI en el mismo origen, con PostgreSQL 18, proxy HTTPS Caddy y discos Docker persistentes para base y PDF. La base se llama **sgd_evaluacion**, exclusivamente para pruebas con datos ficticios. NO trasladar partidas reales sin autorizacion institucional.
 
+## Instalacion automatizada para un VPS nuevo (Ubuntu 26.04)
+
+En hPanel, pulse **Consola web**, acceda como administrador y ejecute:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lualloco76-dot/sgd-tibu-udes/main/deploy/hostinger/instalar.sh -o /root/instalar_sgd_tibu.sh
+bash -n /root/instalar_sgd_tibu.sh
+bash /root/instalar_sgd_tibu.sh
+```
+
+El script solicita el **dominio propio**. Primero configure en su DNS un registro A dirigido a la IP del VPS. El instalador comprueba Ubuntu, puertos y recursos, instala Docker si falta, descarga el repositorio, crea **secretos diferentes y aleatorios** en `.env`, arranca contenedores y consulta `/health` y las tablas PostgreSQL. **No reinstala el sistema operativo, no borra datos ni altera reglas de firewall.** Si ya existe `/opt/sgd-tibu` o los puertos 80/443 estan ocupados, se detiene.
+
+Para revisar antes el codigo: [instalar.sh](instalar.sh). No envíe credenciales a un chat. Puede terminar sin URL HTTPS si el DNS no esta apuntado o si Hostinger bloquea 80/443; corrija esa configuracion antes de declarar completado el despliegue.
+
+**Procedimiento manual alternativo:**
+
 ## 0. Requisitos y advertencias
 
-- VPS Hostinger con Ubuntu 24.04, Docker Engine y complemento Docker Compose.
+- VPS Hostinger con Ubuntu **26.04 LTS** (el sistema mostrado en hPanel) o 24.04 LTS, compatible con Docker Engine y Compose.
 - Un dominio o subdominio que apunte mediante registro DNS A a la IP publica del VPS.
 - Puertos TCP 80/443 accesibles para TLS automatico y SSH accesible para administracion.
 - Los puertos PostgreSQL 5432 y FastAPI 8000 quedan en la red privada de Docker.
 - Si el VPS ya tiene sitios o un panel (CloudPanel, CyberPanel, cPanel, etc.), NO instale otro proxy sobre 80/443 sin comprobar conflictos; NO reinstale el sistema operativo sin copia completa.
 - Recomendado para compilacion en el VPS: >= 4 GB RAM y >= 2 vCPU, sujeto a medicion; no son especificaciones ya comprobadas del alojamiento.
 
-Hostinger dispone de una plantilla de Ubuntu con Docker. No reinstalar Ubuntu si el VPS contiene datos.
+Docker oficial soporta Ubuntu 26.04 LTS. **No reinstalar Ubuntu si el VPS contiene datos**.
 
 ## 1. Abrir terminal SSH
 
