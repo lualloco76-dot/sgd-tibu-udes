@@ -38,6 +38,8 @@ jobs:
                   pure = pathlib.PurePosixPath(name)
                   if not name or pure.is_absolute() or '..' in pure.parts or '\\' in name:
                       raise SystemExit('Ruta no permitida')
+                  if pure.parts[0] == '.github':
+                      continue
                   if pure.parts[0] == '.git':
                       raise SystemExit('Directorio .git no permitido')
                   if (item.external_attr >> 16) & 0o170000 == stat.S_IFLNK:
@@ -46,10 +48,8 @@ jobs:
                   target.parent.mkdir(parents=True, exist_ok=True)
                   target.write_bytes(z.read(item))
                   count += 1
-          if count != 271:
+          if count != 270:
               raise SystemExit(f'Numero inesperado de archivos: {count}')
-          (root / 'SGD_TIBU_SUBIDA_GITHUB_PREPARADA.zip').unlink()
-          (root / '.github/workflows/importar-sgd.yml').unlink()
           print(f'Listo: {count} archivos del SGD Tibu extraidos a la raiz.')
           PY
       - name: Registrar el codigo fuente en main
