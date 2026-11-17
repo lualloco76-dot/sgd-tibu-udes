@@ -34,6 +34,7 @@ services:
       UPLOAD_DIR: /var/data/sgd/uploads
       BACKUP_DIR: /var/data/sgd/backups
       BACKUP_SCHEDULER_ENABLED: "false"
+      SGD_PRIVATE_DB_NETWORK: "1"
       PG_DUMP_PATH: pg_dump
     volumes:
       - sgd_documents:/var/data/sgd
