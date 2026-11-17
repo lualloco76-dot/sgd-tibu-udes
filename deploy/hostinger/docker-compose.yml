@@ -1,0 +1,72 @@
+name: sgd-tibu
+
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sgd_evaluacion
+      POSTGRES_USER: sgd
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD en .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sgd -d sgd_evaluacion"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql+psycopg2://sgd:${POSTGRES_PASSWORD:?}@db:5432/sgd_evaluacion"
+      SECRET_KEY: ${SECRET_KEY:?Defina SECRET_KEY en .env}
+      PUBLIC_BASE_URL: "https://${DOMAIN:?Defina DOMAIN en .env}"
+      DEMO_PASSWORD: ${DEMO_PASSWORD:?Defina DEMO_PASSWORD en .env}
+      DEMO_SEED_ENABLED: ${DEMO_SEED_ENABLED:-false}
+      UPLOAD_DIR: /var/data/sgd/uploads
+      BACKUP_DIR: /var/data/sgd/backups
+      BACKUP_SCHEDULER_ENABLED: "false"
+      PG_DUMP_PATH: pg_dump
+    volumes:
+      - sgd_documents:/var/data/sgd
+    expose:
+      - "8000"
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 180s
+      retries: 5
+
+  proxy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      DOMAIN: ${DOMAIN:?Defina DOMAIN en .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  postgres_data:
+  sgd_documents:
+  caddy_data:
+  caddy_config:
