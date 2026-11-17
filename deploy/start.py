@@ -12,7 +12,11 @@ from sqlalchemy.engine import make_url
 url = make_url(os.environ['DATABASE_URL'])
 if url.get_backend_name() != 'postgresql':
     raise RuntimeError('El despliegue requiere PostgreSQL explícito')
-if url.host not in {'127.0.0.1', 'localhost'} and url.query.get('sslmode') not in {'require', 'verify-full'}:
+private_db_hosts = {'127.0.0.1', 'localhost'}
+# Hostinger Docker: 'db' is a private Compose network hostname, not an internet server.
+if os.environ.get('SGD_PRIVATE_DB_NETWORK') == '1':
+    private_db_hosts.add('db')
+if url.host not in private_db_hosts and url.query.get('sslmode') not in {'require', 'verify-full'}:
     raise RuntimeError('PostgreSQL remoto requiere sslmode=require o verify-full')
 public_url = os.environ.get('PUBLIC_BASE_URL') or os.environ.get('RENDER_EXTERNAL_URL')
 if not public_url or not public_url.startswith('https://'):
