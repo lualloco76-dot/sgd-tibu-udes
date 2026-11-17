@@ -1,0 +1,10 @@
+{
+  "scan_enabled": false,
+  "paid_usage_authorized": false,
+  "max_budget_usd": 0,
+  "allowed_urls": ["http://127.0.0.1:8765", "http://host.docker.internal:8765"],
+  "allowed_database": "sgd_evaluacion",
+  "source": "isolated source copy, excluding .env, backups, private data and delivery archives",
+  "prohibited": ["third-party hosts", "Render infrastructure", "Neon infrastructure", "original PostgreSQL database"],
+  "instruction_file": "security/strix-scope.md"
+}

@@ -1,0 +1,5 @@
+# Preserve binary artifacts and raw validation evidence on Windows checkouts.
+*.pdf binary
+*.png binary
+*.zip binary
+ENTREGA_TECNICA_SGD_TIBU/evidencias/* -text

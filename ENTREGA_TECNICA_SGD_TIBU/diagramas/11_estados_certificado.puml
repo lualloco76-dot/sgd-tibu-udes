@@ -1,0 +1,24 @@
+@startuml
+hide empty description
+skinparam linetype ortho
+[*] --> preparado : preparar / guardar instantánea
+preparado --> autorizado : autorizar [párroco custodio]
+autorizado --> firmado : firmar [párroco custodio\ny sin competencia de Curia]
+autorizado --> aprobado_curia : aprobar-curia [canciller\ny requiere Curia]
+aprobado_curia --> firmado : firmar [canciller\ny requiere Curia]
+preparado --> anulado : anular
+autorizado --> anulado : anular
+aprobado_curia --> anulado : anular
+firmado --> anulado : anular
+anulado --> [*]
+note right of firmado
+ Solo este estado permite PDF
+ y verificación pública válida.
+ Firma registrada en aplicación;
+ sin firma digital criptográfica.
+end note
+note bottom of anulado
+ Anula el párroco custodio o el canciller.
+ Estado terminal; auditoría conserva motivo y autor.
+end note
+@enduml

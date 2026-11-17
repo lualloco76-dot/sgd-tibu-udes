@@ -1,0 +1,168 @@
+@startuml
+title Entidad-relación: esquema ORM actual
+hide circle
+skinparam linetype ortho
+skinparam entityAttributeIconSize 0
+entity "parroquias" as parroquias {
+  * id : INTEGER <<PK>>
+  * nombre : VARCHAR(200)
+  * codigo : VARCHAR(40)
+  * activa : BOOLEAN
+    municipio : VARCHAR(150)
+    localidad : VARCHAR(150)
+    direccion : VARCHAR(250)
+  * tipo : VARCHAR(30)
+}
+entity "sacramentos" as sacramentos {
+  * id : INTEGER <<PK>>
+  * nombre : VARCHAR
+    descripcion : TEXT
+}
+entity "libros" as libros {
+  * id : INTEGER <<PK>>
+  * parroquia_id : INTEGER <<FK>>
+  * sacramento_id : INTEGER <<FK>>
+  * numero : VARCHAR(100)
+}
+  parroquias ||--o{ libros : "parroquia_id"
+  sacramentos ||--o{ libros : "sacramento_id"
+entity "personas" as personas {
+  * id : INTEGER <<PK>>
+  * nombres : VARCHAR
+  * apellidos : VARCHAR
+    fecha_nacimiento : DATE
+    lugar_nacimiento : VARCHAR
+    numero_identificacion : VARCHAR
+    telefono : VARCHAR
+    email : VARCHAR
+    parroquia_id : INTEGER <<FK>>
+}
+  parroquias |o--o{ personas : "parroquia_id"
+entity "usuarios" as usuarios {
+  * id : INTEGER <<PK>>
+  * nombre : VARCHAR
+  * email : VARCHAR
+  * password_hash : VARCHAR
+    rol : VARCHAR
+    activo : BOOLEAN
+    parroquia_id : INTEGER <<FK>>
+  * token_version : INTEGER
+  * intentos_fallidos : INTEGER
+    bloqueado_hasta : DATETIME
+}
+  parroquias |o--o{ usuarios : "parroquia_id"
+entity "auditoria" as auditoria {
+  * id : INTEGER <<PK>>
+    usuario_id : INTEGER <<FK>>
+  * accion : VARCHAR
+  * entidad : VARCHAR
+    entidad_id : INTEGER
+    fecha : DATETIME
+    detalle : TEXT
+    parroquia_id : INTEGER <<FK>>
+}
+  usuarios |o--o{ auditoria : "usuario_id"
+  parroquias |o--o{ auditoria : "parroquia_id"
+entity "registros_sacramentales" as registros_sacramentales {
+  * id : INTEGER <<PK>>
+  * persona_id : INTEGER <<FK>>
+  * sacramento_id : INTEGER <<FK>>
+    fecha_celebracion : DATE
+    lugar : VARCHAR
+    ministro : VARCHAR
+    libro : VARCHAR
+    folio : VARCHAR
+    numero : VARCHAR
+    notas : TEXT
+    parroquia_id : INTEGER <<FK>>
+  * datos : JSON
+}
+  personas ||--o{ registros_sacramentales : "persona_id"
+  sacramentos ||--o{ registros_sacramentales : "sacramento_id"
+  parroquias |o--o{ registros_sacramentales : "parroquia_id"
+entity "sesiones" as sesiones {
+  * id : VARCHAR(64) <<PK>>
+  * usuario_id : INTEGER <<FK>>
+  * expira : DATETIME
+  * revocada : BOOLEAN
+}
+  usuarios ||--o{ sesiones : "usuario_id"
+entity "documentos" as documentos {
+  * id : INTEGER <<PK>>
+  * registro_id : INTEGER <<FK>>
+  * tipo_documento : VARCHAR
+  * nombre_archivo : VARCHAR
+  * ruta_archivo : VARCHAR
+  * hash_sha256 : VARCHAR
+    fecha_subida : DATETIME
+    subido_por : INTEGER <<FK>>
+}
+  registros_sacramentales ||--o{ documentos : "registro_id"
+  usuarios |o--o{ documentos : "subido_por"
+entity "notas_marginales" as notas_marginales {
+  * id : INTEGER <<PK>>
+  * registro_id : INTEGER <<FK>>
+  * usuario_id : INTEGER <<FK>>
+  * fecha : DATETIME
+  * motivo : TEXT
+  * anterior : JSON
+  * posterior : JSON
+}
+  registros_sacramentales ||--o{ notas_marginales : "registro_id"
+  usuarios ||--o{ notas_marginales : "usuario_id"
+entity "solicitudes" as solicitudes {
+  * id : INTEGER <<PK>>
+  * registro_id : INTEGER <<FK>>
+  * origen_id : INTEGER <<FK>>
+  * destino_id : INTEGER <<FK>>
+  * solicitante_id : INTEGER <<FK>>
+  * estado : VARCHAR(20)
+  * motivo : TEXT
+    decision_motivo : TEXT
+    responsable_id : INTEGER <<FK>>
+  * fecha_creacion : DATETIME
+    fecha_decision : DATETIME
+  * requiere_aprobacion_curia : BOOLEAN
+    aprobado_curia_por : INTEGER <<FK>>
+    fecha_aprobacion_curia : DATETIME
+    motivo_curia : TEXT
+}
+  registros_sacramentales ||--o{ solicitudes : "registro_id"
+  parroquias ||--o{ solicitudes : "origen_id"
+  parroquias ||--o{ solicitudes : "destino_id"
+  usuarios ||--o{ solicitudes : "solicitante_id"
+  usuarios |o--o{ solicitudes : "responsable_id"
+  usuarios |o--o{ solicitudes : "aprobado_curia_por"
+entity "certificados" as certificados {
+  * id : INTEGER <<PK>>
+  * numero : VARCHAR(60)
+  * registro_id : INTEGER <<FK>>
+    solicitud_id : INTEGER <<FK>>
+  * emitido_por : INTEGER <<FK>>
+  * parroquia_id : INTEGER <<FK>>
+  * codigo_verificacion : VARCHAR(100)
+  * fecha_emision : DATETIME
+  * instantanea : JSON
+  * estado : VARCHAR(20)
+    autorizado_por : INTEGER <<FK>>
+    fecha_autorizacion : DATETIME
+  * requiere_aprobacion_curia : BOOLEAN
+    aprobado_curia_por : INTEGER <<FK>>
+    fecha_aprobacion_curia : DATETIME
+    motivo_curia : TEXT
+    firmado_por : INTEGER <<FK>>
+    fecha_firma : DATETIME
+}
+  registros_sacramentales ||--o{ certificados : "registro_id"
+  solicitudes |o--o{ certificados : "solicitud_id"
+  usuarios ||--o{ certificados : "emitido_por"
+  parroquias ||--o{ certificados : "parroquia_id"
+  usuarios |o--o{ certificados : "autorizado_por"
+  usuarios |o--o{ certificados : "aprobado_curia_por"
+  usuarios |o--o{ certificados : "firmado_por"
+note bottom
+  Campos obligatorios: prefijo *. PK/FK indicadas.
+  La custodia histórica desconocida permanece NULL.
+  Ver diccionario para índices y restricciones compuestas.
+end note
+@enduml

@@ -1,0 +1,50 @@
+# Catálogo de pruebas automatizadas
+
+Generado por análisis sintáctico. La presencia de una prueba no implica que se haya ejecutado. Consultar resultados y XML de evidencia.
+
+| Archivo | Caso |
+|---|---|
+| `backend/tests/test_api.py` | `test_login_catalog_is_public_minimal_and_only_active` |
+| `backend/tests/test_api.py` | `test_parish_login_requires_assigned_context_without_changing_custody` |
+| `backend/tests/test_api.py` | `test_diocesan_login_uses_diocesan_context_and_parish_ids_are_strict` |
+| `backend/tests/test_api.py` | `test_eight_character_passwords_create_reset_change_and_revoke_sessions` |
+| `backend/tests/test_api.py` | `test_dashboard_preserves_tenant_scope_and_audit_permissions` |
+| `backend/tests/test_api.py` | `test_directory_metadata_validation_and_clear_fields` |
+| `backend/tests/test_api.py` | `test_integral_approval_pdf_qr_and_audit` |
+| `backend/tests/test_api.py` | `test_rejection_final_state_and_download_denial` |
+| `backend/tests/test_api.py` | `test_four_record_types_and_history` |
+| `backend/tests/test_api.py` | `test_roles_isolation_user_administration` |
+| `backend/tests/test_api.py` | `test_lockout_recovery_and_session_invalidation` |
+| `backend/tests/test_api.py` | `test_revocation_deactivation_and_tokens` |
+| `backend/tests/test_api.py` | `test_validation_duplicates_and_search` |
+| `backend/tests/test_api.py` | `test_upload_download_integrity_and_traversal` |
+| `backend/tests/test_api.py` | `test_headers_cors_and_public_privacy` |
+| `backend/tests/test_api.py` | `test_notes_and_controlled_legacy_custody` |
+| `backend/tests/test_api.py` | `test_concurrent_request_decisions` |
+| `backend/tests/test_api.py` | `test_configuration_and_sanitized_errors` |
+| `backend/tests/test_api.py` | `test_administrative_catalogs_users_and_reports` |
+| `backend/tests/test_api.py` | `test_upload_size_storage_boundary_and_book_validation` |
+| `backend/tests/test_api.py` | `test_rejects_structurally_invalid_active_and_encrypted_pdf` |
+| `backend/tests/test_api.py` | `test_certificate_authorization_separates_prepare_authorize_sign` |
+| `backend/tests/test_api.py` | `test_certificate_curia_approval_flow` |
+| `backend/tests/test_api.py` | `test_auditor_read_only_global_control` |
+| `backend/tests/test_api.py` | `test_secretario_general_diocesan_coordination` |
+| `backend/tests/test_api.py` | `test_parroco_assigns_only_parish_roles` |
+| `backend/tests/test_api.py` | `test_diocesan_certificates_visible_and_downloadable` |
+| `backend/tests/test_api.py` | `test_invalid_certificate_transitions_and_annulment` |
+| `backend/tests/test_api.py` | `test_interparish_curia_full_lifecycle` |
+| `backend/tests/test_api.py` | `test_unassigned_custody_does_not_grant_auditor_legacy_records` |
+| `backend/tests/test_api.py` | `test_concurrent_certificate_authorization` |
+| `backend/tests/test_api.py` | `test_correction_cannot_select_unconfigured_book` |
+| `backend/tests/test_api.py` | `test_database_failure_is_sanitized` |
+| `backend/tests/test_migrations.py` | `test_new_schema_and_idempotence` |
+| `backend/tests/test_migrations.py` | `test_legacy_preserves_rows_and_requires_adoption` |
+| `backend/tests/test_migrations.py` | `test_adoption_rejects_unrecognized_schema` |
+| `backend/tests/test_migrations.py` | `test_custody_reference_uniqueness_and_state_constraint` |
+| `backend/tests/test_migrations.py` | `test_destructive_downgrade_is_blocked` |
+| `backend/tests/test_migrations.py` | `test_foreign_keys_protect_document_integrity` |
+| `backend/tests/test_migrations.py` | `test_postgresql_legacy_enum_accepts_diocesan_admin` |
+| `backend/tests/test_migrations.py` | `test_rbac_migration_preserves_secretary_and_certificate_states` |
+| `backend/tests/test_migrations.py` | `test_guard_rejects_production_test_targets` |
+| `backend/tests/test_migrations.py` | `test_migrated_schema_contains_orm_columns_and_foreign_keys` |
+| `backend/tests/test_migrations.py` | `test_directory_upgrade_preserves_existing_parish` |

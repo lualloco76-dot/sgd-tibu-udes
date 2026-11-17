@@ -1,0 +1,27 @@
+# Prepared only. Creating this Blueprint activates paid resources; review first.
+services:
+  - type: web
+    name: sgd-tibu-evaluacion
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass
+    disk:
+      name: sgd-evaluacion-archivos
+      mountPath: /var/data/sgd
+      sizeGB: 1
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: DEMO_SEED_ENABLED
+        value: "true"
+      - key: UPLOAD_DIR
+        value: /var/data/sgd/uploads
+      - key: BACKUP_DIR
+        value: /var/data/sgd/backups
+      - key: BACKUP_SCHEDULER_ENABLED
+        value: "false"

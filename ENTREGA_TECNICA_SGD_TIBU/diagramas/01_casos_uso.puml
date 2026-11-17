@@ -1,0 +1,79 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor "Usuario institucional" as U
+actor "Administrador" as A
+actor "Párroco" as P
+actor "Secretario parroquial" as S
+actor "Secretario general" as G
+actor "Canciller" as C
+actor "Auditor" as AU
+actor "Consulta" as Q
+actor "Visitante" as V
+A --|> U
+P --|> U
+S --|> U
+G --|> U
+C --|> U
+AU --|> U
+Q --|> U
+rectangle "SGD Diócesis de Tibú" {
+ usecase "Autenticar / cerrar sesión\ny cambiar contraseña" as Login
+ usecase "Consultar reportes según alcance" as Report
+ usecase "Administrar usuarios permitidos" as Users
+ usecase "Administrar parroquias /\nconciliar custodia histórica" as Parish
+ usecase "Registrar / corregir partidas,\npersonas, libros y adjuntos" as Write
+ usecase "Consultar documentación\nsegún custodia o lectura global" as Read
+ usecase "Solicitar partida externa" as Request
+ usecase "Decidir solicitud de custodia" as Decide
+ usecase "Preparar certificado" as Prep
+ usecase "Autorizar certificado propio" as Auth
+ usecase "Aprobar certificado de Curia" as Curia
+ usecase "Firmar / anular certificado" as Sign
+ usecase "Consultar auditoría según alcance" as Audit
+ usecase "Verificar QR con datos mínimos" as QR
+}
+U -- Login
+U -- Report
+A -- Users
+P -- Users
+A -- Parish
+A -- Write
+P -- Write
+S -- Write
+A -- Read
+P -- Read
+S -- Read
+G -- Read
+C -- Read
+Q -- Read
+A -- Request
+P -- Request
+S -- Request
+G -- Request
+C -- Request
+A -- Decide
+P -- Decide
+S -- Decide
+A -- Prep
+P -- Prep
+S -- Prep
+G -- Prep
+C -- Prep
+P -- Auth
+C -- Curia
+P -- Sign
+C -- Sign
+A -- Audit
+P -- Audit
+G -- Audit
+C -- Audit
+AU -- Audit
+V -- QR
+note bottom of Sign
+ Firma: párroco sobre autorizado ordinario propio;
+ canciller sobre aprobado_curia de Curia.
+ Anulación: párroco custodio o canciller.
+ El administrador no hereda facultades eclesiásticas.
+end note
+@enduml

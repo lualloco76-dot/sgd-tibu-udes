@@ -1,0 +1,121 @@
+{
+  "fecha": "2026-10-28",
+  "origen": "Lista suministrada por el responsable en la conversación",
+  "codigos": "Identificadores internos generados para el sistema; no representan códigos oficiales de la Diócesis",
+  "campos_en_base": [
+    "nombre",
+    "codigo",
+    "activa",
+    "municipio",
+    "localidad",
+    "direccion",
+    "tipo"
+  ],
+  "datos_complementarios": "Las ubicaciones suministradas se incorporaron a PostgreSQL mediante migración 0004 y actualización auditada; los datos no indicados permanecen nulos.",
+  "parroquias": [
+    {
+      "codigo": "PAR-001",
+      "nombre": "San Luis Beltrán (Iglesia Catedral)",
+      "tipo": "Catedral",
+      "municipio": "Tibú",
+      "localidad": null,
+      "direccion": "Calle 7 N° 4-52, Barrio El Carmen"
+    },
+    {
+      "codigo": "PAR-002",
+      "nombre": "La Santísima Trinidad",
+      "tipo": "Parroquia",
+      "municipio": "Tibú",
+      "localidad": "La Gabarra",
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-003",
+      "nombre": "María Inmaculada",
+      "tipo": "Parroquia",
+      "municipio": "Tibú",
+      "localidad": null,
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-004",
+      "nombre": "María Auxiliadora",
+      "tipo": "Parroquia",
+      "municipio": "Cúcuta",
+      "localidad": "Buena Esperanza",
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-005",
+      "nombre": "Nuestra Señora de Fátima",
+      "tipo": "Parroquia",
+      "municipio": null,
+      "localidad": null,
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-006",
+      "nombre": "Nuestra Señora del Carmen",
+      "tipo": "Parroquia",
+      "municipio": "Puerto Santander",
+      "localidad": null,
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-007",
+      "nombre": "Nuestra Señora de Guadalupe (Cuasiparroquia)",
+      "tipo": "Cuasiparroquia",
+      "municipio": "Cúcuta",
+      "localidad": "Banco de Arena",
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-008",
+      "nombre": "San Faustino",
+      "tipo": "Parroquia",
+      "municipio": "Cúcuta",
+      "localidad": "San Faustino de los Ríos",
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-009",
+      "nombre": "San Isidro Labrador",
+      "tipo": "Parroquia",
+      "municipio": "Sardinata",
+      "localidad": "San Martín de Loba",
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-010",
+      "nombre": "San José",
+      "tipo": "Parroquia",
+      "municipio": "El Zulia",
+      "localidad": "Astilleros",
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-011",
+      "nombre": "San Marcos",
+      "tipo": "Parroquia",
+      "municipio": "El Tarra",
+      "localidad": null,
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-012",
+      "nombre": "Señor de los Milagros",
+      "tipo": "Parroquia",
+      "municipio": null,
+      "localidad": null,
+      "direccion": null
+    },
+    {
+      "codigo": "PAR-013",
+      "nombre": "San Vicente Ferrer",
+      "tipo": "Parroquia",
+      "municipio": null,
+      "localidad": null,
+      "direccion": null
+    }
+  ]
+}

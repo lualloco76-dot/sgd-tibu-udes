@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+title Máquina de estados de la solicitud interparroquial
+state "pendiente" as Pendiente
+state "aprobada" as Aprobada
+state "rechazada" as Rechazada
+Aprobada : Decisión terminal
+Aprobada : Permite preparar entrega vinculada
+Rechazada : Decisión terminal
+Rechazada : No habilita entrega
+[*] --> Pendiente : crear\n[origen distinto del custodiante]
+Pendiente --> Aprobada : aprobar\n[autorizado]
+Pendiente --> Rechazada : rechazar\n[autorizado]
+Aprobada --> [*]
+Rechazada --> [*]
+note top of Pendiente
+  Se actualiza solo si el estado
+  persistido sigue pendiente.
+end note
+legend bottom left
+  Autorizado = custodiante con rol permitido o administrador.
+  Decidir registra responsable, motivo, fecha y auditoría.
+  Origen y terceros no deciden. Segunda decisión: HTTP 409.
+  CHECK limita estados. Emitir/descargar no cambia el estado.
+  El fin del ciclo de decisión no elimina la solicitud.
+endlegend
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+actor Custodiante as C
+participant React as UI
+participant "Router registros" as API
+participant "Validación de acceso/datos" as V
+database PostgreSQL as DB
+C -> UI : Corregir partida con motivo
+UI -> API : PATCH /api/registros/{id}
+API -> V : Sesión, rol, custodia y datos
+alt autorización o datos inválidos
+ V --> API : Denegación / validación fallida
+ API --> UI : 403 o 422
+else válida
+ API -> DB : Leer partida con bloqueo
+ API -> DB : Guardar NotaMarginal antes/después
+ API -> DB : Actualizar partida y auditoría
+ API -> DB : COMMIT
+ API --> UI : Partida actualizada
+end
+C -> UI : Consultar historial
+UI -> API : GET /api/registros/{id}/historial
+API -> V : Verificar custodia
+API -> DB : Leer notas ordenadas
+API --> UI : Autor, fecha, motivo y valores
+note over API, DB
+ El certificado previamente emitido conserva su instantánea.
+ No se elimina el asiento ni se transfiere custodia.
+end note
+@enduml

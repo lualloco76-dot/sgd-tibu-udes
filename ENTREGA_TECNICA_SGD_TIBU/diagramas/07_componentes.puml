@@ -1,0 +1,30 @@
+@startuml
+skinparam componentStyle uml2
+component "Frontend React" as UI
+component "Cliente Axios" as HTTP
+component "Routers FastAPI" as API
+component "Schemas Pydantic" as Schemas
+component "Sesión / roles / custodia" as Auth
+component "Servicios de negocio\ny auditoría" as Business
+component "Generador PDF/QR" as PDF
+component "Storage restringido" as Storage
+component "SQLAlchemy\nModelos y sesiones" as ORM
+component "Alembic" as Migration
+database PostgreSQL as DB
+UI --> HTTP
+HTTP --> API : REST JSON/multipart + Bearer
+API ..> Schemas : valida
+API ..> Auth : autoriza
+API --> Business
+API --> ORM
+Business --> ORM
+Auth --> ORM
+API --> PDF
+API --> Storage
+ORM --> DB
+Migration --> DB : actualización explícita
+note bottom of API
+  Verificación pública: código opaco y respuesta mínima.
+  Las descargas requieren autorización en servidor.
+end note
+@enduml

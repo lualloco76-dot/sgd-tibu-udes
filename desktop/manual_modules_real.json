@@ -1,0 +1,382 @@
+[
+  {
+    "key": "login",
+    "title": "Acceso e inicio de sesión",
+    "roles": "Todos los usuarios activos",
+    "route": "/login",
+    "purpose": "Comprueba identidad, contraseña y contexto parroquial o diocesano.",
+    "steps": [
+      "Abra SGD Diócesis de Tibú desde su acceso directo.",
+      "Seleccione Acceso diocesano / administración.",
+      "Ingrese admin@iglesia.org y la contraseña admin123.",
+      "Pulse Iniciar sesión. Se conserva la cuenta original y no se exige cambiar su contraseña para esta evaluación."
+    ],
+    "validations": "Cinco intentos fallidos bloquean la cuenta durante 15 minutos. El contexto equivocado también falla. Una parroquia inactiva no puede iniciar sesión con cuentas parroquiales.",
+    "result": "Se presenta el panel y el rol de la cuenta.",
+    "errors": "Credenciales incorrectas: revise mayúsculas, correo y contexto. No insista durante el bloqueo.",
+    "relations": "Usuarios, parroquias y sesiones."
+  },
+  {
+    "key": "panel",
+    "title": "Panel principal y navegación",
+    "roles": "Todos, con indicadores filtrados por su alcance",
+    "route": "/",
+    "purpose": "Presenta indicadores calculados desde PostgreSQL, accesos rápidos y actividad reciente.",
+    "steps": [
+      "Inicie sesión y seleccione Panel principal.",
+      "Revise el alcance indicado en la cuenta y los indicadores disponibles.",
+      "Abra una acción rápida o una partida reciente.",
+      "Use la estrella para favoritos, la luna para apariencia y Buscar en el archivo para navegación y consultas."
+    ],
+    "validations": "Las cifras dependen del rol, custodia y datos vigentes. Un panel vacío no autoriza importar ni crear información ajena.",
+    "result": "Los enlaces abren los módulos correspondientes y conservan las restricciones del servidor.",
+    "errors": "Una cifra distinta entre roles puede ser correcta por custodia. Actualice la página si perdió conexión.",
+    "relations": "Reportes, partidas, solicitudes, auditoría y preferencias locales."
+  },
+  {
+    "key": "registros",
+    "title": "Consulta de partidas",
+    "roles": "Todos; el auditor sin custodia no recibe partidas nominativas",
+    "route": "/registros",
+    "purpose": "Busca asientos por persona, referencia del libro, parroquia y fechas, con historial de cambios.",
+    "steps": [
+      "Entre a Consulta de partidas.",
+      "Escriba Nombre, Libro, Folio o Partida; combine Desde y Hasta si conoce el intervalo.",
+      "Pulse Buscar; use Limpiar filtros para volver a la lista.",
+      "Pulse Ver para revisar el asiento e Historial para sus correcciones.",
+      "Los escritores de la custodia pueden registrar, corregir o agregar una nota marginal."
+    ],
+    "validations": "La combinación de custodia, sacramento, libro, folio y número es única. Las fechas de creación no pueden ser futuras. Solo el administrador asigna custodia a asientos históricos sin parroquia.",
+    "result": "La lista devuelve solo filas autorizadas. Una corrección conserva anterior, posterior, motivo, fecha y usuario.",
+    "errors": "Sin resultados: retire filtros y compruebe la custodia. Conflicto 409: revise una referencia duplicada o un cambio concurrente.",
+    "relations": "Personas, catálogo, libros, notas marginales, certificados y auditoría."
+  },
+  {
+    "key": "bautismos",
+    "title": "Bautismos",
+    "roles": "Administrador, párroco y secretario parroquial registran; los demás consultan según alcance",
+    "route": "/bautismos",
+    "purpose": "Registra partidas de bautismo y sus referencias familiares sin reemplazar el asiento histórico.",
+    "steps": [
+      "Registre a la persona en Personas y cree el libro de Bautismo en Libros sacramentales.",
+      "Entre a Bautismos y pulse Registrar partida.",
+      "Elija primero Parroquia custodiante; después Persona y Libro.",
+      "Diligencie fecha, folio y número, y los datos familiares que consten en el asiento.",
+      "Pulse Guardar partida y consulte la fila e historial."
+    ],
+    "validations": "Persona, libro y parroquia deben corresponder a la misma custodia. Padre, madre, padrino y madrina son datos adicionales, no cuentas de usuario.",
+    "result": "El bautismo queda disponible para consulta, soporte documental y preparación de certificado.",
+    "errors": "Persona o libro vacíos: elija la parroquia primero o créelos en su módulo. Una fecha futura se rechaza.",
+    "relations": "Personas, libros de Bautismo, certificados, soportes e historial."
+  },
+  {
+    "key": "confirmaciones",
+    "title": "Confirmaciones",
+    "roles": "Escritores parroquiales y administrador; consulta por alcance",
+    "route": "/confirmaciones",
+    "purpose": "Registra confirmaciones con padrinos y referencia de bautismo.",
+    "steps": [
+      "Cree o identifique la persona y el libro de Confirmación.",
+      "Entre a Confirmaciones, pulse Registrar partida y seleccione custodia, persona y libro.",
+      "Ingrese fecha, folio, partida, padrino o madrina y referencia del bautismo si consta.",
+      "Guarde y revise el detalle."
+    ],
+    "validations": "La referencia del bautismo es texto consignado; no implica una relación automática con otro asiento. La fecha y la referencia documental son obligatorias.",
+    "result": "Se registra una confirmación en el catálogo correspondiente.",
+    "errors": "Un libro de Bautismo no aparece como libro de Confirmación. Configure el libro del tipo correcto.",
+    "relations": "Personas, libros de Confirmación, bautismo como referencia textual y certificados."
+  },
+  {
+    "key": "matrimonios",
+    "title": "Matrimonios",
+    "roles": "Escritores parroquiales y administrador; consulta por alcance",
+    "route": "/matrimonios",
+    "purpose": "Registra el asiento y vincula a la otra persona contrayente por su identificador.",
+    "steps": [
+      "Registre a ambas personas en la misma parroquia.",
+      "Abra Matrimonios y Registrar partida.",
+      "Seleccione custodia, persona, libro, fecha, folio y número.",
+      "Seleccione Otra persona contrayente y complete testigos.",
+      "Guarde y revise el detalle antes de preparar el certificado."
+    ],
+    "validations": "La otra persona es obligatoria, debe existir, ser distinta y estar en la misma custodia. Los testigos son texto adicional.",
+    "result": "El asiento conserva la referencia a la otra persona y el certificado prepara una instantánea de ambos nombres.",
+    "errors": "Si no aparece el contrayente, revise su custodia. El sistema no permite seleccionar a la misma persona dos veces.",
+    "relations": "Dos fichas de Personas, libros de Matrimonio e instantánea del certificado."
+  },
+  {
+    "key": "defunciones",
+    "title": "Defunciones",
+    "roles": "Escritores parroquiales y administrador; consulta por alcance",
+    "route": "/defunciones",
+    "purpose": "Conserva el asiento de exequias o defunción y los datos consignados en el libro.",
+    "steps": [
+      "Registre la persona y el libro de Defunción.",
+      "Entre a Defunciones y Registrar partida.",
+      "Complete Fecha del asiento / exequias, libro, folio y número.",
+      "Diligencie Fecha de defunción, Causa consignada y Lugar de sepultura cuando consten.",
+      "Guarde y verifique el detalle."
+    ],
+    "validations": "La fecha del asiento es obligatoria y no futura. No se infiere una causa médica; se transcribe el dato documental. No hay un módulo de cementerio activo en las rutas vigentes.",
+    "result": "La defunción aparece como tipo del archivo y puede tener soporte PDF y certificado.",
+    "errors": "No confunda fecha del asiento con fecha de defunción. Compruebe los campos del libro.",
+    "relations": "Personas, libros de Defunción, documentos y certificados."
+  },
+  {
+    "key": "personas",
+    "title": "Personas",
+    "roles": "Lectura por alcance; creación y edición con canWrite",
+    "route": "/personas",
+    "purpose": "Mantiene las fichas a las que se vinculan las partidas.",
+    "steps": [
+      "Entre a Personas y pulse Agregar.",
+      "Ingrese nombres, apellidos y parroquia. Complete los campos opcionales que se conozcan.",
+      "Guarde y anote el ID.",
+      "Para corregir, pulse Editar en la fila, cambie los datos y Guarde."
+    ],
+    "validations": "Los nombres y apellidos son obligatorios. Identificación y correo se validan; identificación no puede duplicarse. No se ofrecen eliminaciones de fichas vinculadas.",
+    "result": "La ficha aparece como opción en las partidas de su parroquia.",
+    "errors": "Duplicado: consulte la ficha existente. Correo inválido: corrija el formato o deje el campo opcional vacío.",
+    "relations": "Partidas, contrayentes, custodia y auditoría."
+  },
+  {
+    "key": "libros",
+    "title": "Libros sacramentales",
+    "roles": "Lectura por alcance; creación con canWrite",
+    "route": "/libros",
+    "purpose": "Define los libros disponibles para cada parroquia y tipo de partida.",
+    "steps": [
+      "Entre a Libros sacramentales o Configuración.",
+      "Pulse Agregar.",
+      "Seleccione Parroquia, Tipo de partida y Número / referencia del libro.",
+      "Pulse Guardar y vuelva al formulario de partida."
+    ],
+    "validations": "Parroquia, tipo y número forman una referencia única. La interfaz vigente crea libros, pero no ofrece editar o eliminar libros existentes.",
+    "result": "El libro se ofrece al elegir su parroquia y sacramento en una partida nueva.",
+    "errors": "Si no aparece, recargue el formulario y verifique tipo y custodia. Un libro duplicado devuelve conflicto.",
+    "relations": "Catálogo de partidas, parroquias y asientos."
+  },
+  {
+    "key": "solicitudes",
+    "title": "Solicitudes entre parroquias",
+    "roles": "Preparación con canPrepareCert; decisión con canWrite en la custodia de destino",
+    "route": "/solicitudes",
+    "purpose": "Solicita acceso documental a un asiento custodiado por otra parroquia sin revelar su contenido en la búsqueda de referencias.",
+    "steps": [
+      "Entre a Solicitudes.",
+      "Busque la referencia externa por parroquia, libro, folio y número.",
+      "Seleccione la referencia, explique el motivo y la parroquia de origen cuando su rol sea diocesano.",
+      "Envíe la solicitud. El custodio de destino la revisa y registra Aprobar o Rechazar con motivo.",
+      "La decisión se consulta en el listado y queda en auditoría."
+    ],
+    "validations": "Origen y destino deben ser distintos. Solo una decisión pendiente puede resolverse. El solicitante no obtiene acceso general a la parroquia externa; la aprobación aplica al registro solicitado.",
+    "result": "Estado pendiente, aprobada o rechazada, con responsable y fecha de decisión.",
+    "errors": "Referencia no disponible: verifique la combinación completa. Conflicto de decisión: actualice, otro usuario pudo resolverla.",
+    "relations": "Referencias de partidas, custodia, certificados y auditoría."
+  },
+  {
+    "key": "certificados",
+    "title": "Certificados",
+    "roles": "Preparación con canPrepareCert; facultades de autorizar y firmar separadas",
+    "route": "/certificados",
+    "purpose": "Prepara una instantánea documental y conduce el ciclo preparado, autorizado, aprobado_curia, firmado o anulado.",
+    "steps": [
+      "Entre a Certificados e indique el ID de una partida completa.",
+      "Si corresponde, informe ID de solicitud aprobada. Marque competencia de Curia y motivo solo cuando proceda.",
+      "Pulse Preparar certificado.",
+      "El párroco custodio debe Autorizar. Para un trámite de Curia, el canciller debe Aprobar en Curia.",
+      "El párroco firma los ordinarios y el canciller firma los de Curia aprobados.",
+      "Descargue el PDF únicamente cuando el estado sea firmado."
+    ],
+    "validations": "No se descarga un certificado preparado o autorizado. El administrador no adquiere facultad de autorizar, aprobar Curia ni firmar. Una corrección posterior de la partida no reescribe la instantánea ya preparada.",
+    "result": "PDF con número, referencia, datos de la instantánea, actuación autenticada y QR de verificación local.",
+    "errors": "Partida incompleta: complete fecha, libro, folio y número. Estado incompatible: actualice y respete el orden del trámite.",
+    "relations": "Partidas, solicitudes aprobadas, parroquia, auditoría y verificación."
+  },
+  {
+    "key": "aprobaciones",
+    "title": "Aprobaciones y firma",
+    "roles": "Párroco y canciller, según permisos efectivos y custodia",
+    "route": "/aprobaciones",
+    "purpose": "Reúne certificados que requieren actuación institucional.",
+    "steps": [
+      "Ingrese con el rol de párroco o canciller.",
+      "Abra Aprobaciones y firma y revise Ver trazabilidad.",
+      "Pulse la actuación disponible para el estado.",
+      "Escriba Motivo de la actuación y pulse Confirmar actuación.",
+      "Compruebe nuevo estado, responsable y fecha."
+    ],
+    "validations": "Firmar significa registrar una actuación autenticada y su trazabilidad. No implementa certificado X.509, token criptográfico ni firma digital de un prestador acreditado. La facultad eclesiástica institucional debe ser validada por sus responsables.",
+    "result": "Estado actualizado y actuación trazable; aparece Descargar PDF después de firmado.",
+    "errors": "Botón ausente: revise rol, permiso, custodia y estado. No cambie permisos para saltar una fase.",
+    "relations": "Certificados, políticas de rol y auditoría."
+  },
+  {
+    "key": "documentos",
+    "title": "Gestión documental",
+    "roles": "Lectura autorizada; subir con canWrite",
+    "route": "/documentos",
+    "purpose": "Almacena soportes PDF privados vinculados a una partida con hash SHA-256.",
+    "steps": [
+      "Abra Gestión documental.",
+      "Ingrese ID de la partida y tipo documental acta, partida o soporte.",
+      "Seleccione un PDF válido y pulse Subir documento.",
+      "Revise el listado y use Descargar PDF para comprobarlo."
+    ],
+    "validations": "Máximo 10 MiB y de 1 a 1000 páginas. Se rechazan PDF cifrados, con JavaScript, acciones de apertura, adjuntos incrustados o estructura inválida. No se permite acceder a rutas externas.",
+    "result": "Archivo privado con nombre interno aleatorio y hash registrado en PostgreSQL.",
+    "errors": "413: reduzca el tamaño. 422: regenere un PDF sin contenido activo. Archivo ausente o alterado: acuda al administrador y restaure un respaldo íntegro.",
+    "relations": "Partidas, almacenamiento local, auditoría y respaldos."
+  },
+  {
+    "key": "parroquias",
+    "title": "Directorio de parroquias",
+    "roles": "Todos consultan; solo administrador crea o edita",
+    "route": "/parroquias",
+    "purpose": "Administra comunidades, ubicación, tipo y disponibilidad para el acceso institucional.",
+    "steps": [
+      "Entre a Parroquias.",
+      "Busque nombre, código o municipio y filtre por estado.",
+      "Cambie entre tarjetas y tabla.",
+      "Como administrador, pulse Agregar o Editar; complete y guarde."
+    ],
+    "validations": "El código institucional es único y no se edita desde el formulario de modificación. Inactivar una parroquia impide el acceso de sus cuentas parroquiales. Ver ubicación abre Google Maps y requiere Internet.",
+    "result": "Directorio y catálogo de acceso actualizados. Los datos sacramentales siguen locales.",
+    "errors": "No aparece en login: verifique Activa. Sin botón Editar: la cuenta no es administradora.",
+    "relations": "Usuarios, personas, libros, custodia, solicitudes y acceso."
+  },
+  {
+    "key": "reportes",
+    "title": "Reportes",
+    "roles": "Todos por alcance; auditor con función de control",
+    "route": "/reportes",
+    "purpose": "Presenta estadísticas calculadas desde los registros visibles para el rol.",
+    "steps": [
+      "Entre a Reportes.",
+      "Revise indicadores, distribución de partidas y actividad.",
+      "Use los enlaces disponibles para abrir la fuente de los indicadores.",
+      "Compruebe el alcance antes de comparar cifras con otras cuentas."
+    ],
+    "validations": "Los reportes no conceden acceso de escritura. El auditor puede revisar métricas de control sin obtener automáticamente partidas nominativas.",
+    "result": "Estadísticas coherentes con el rol y la custodia.",
+    "errors": "Cifras diferentes entre roles: revise alcance; no es necesariamente un error de base.",
+    "relations": "Panel, partidas y auditoría."
+  },
+  {
+    "key": "usuarios",
+    "title": "Administración de usuarios",
+    "roles": "Administrador global; párroco limitado a secretaría parroquial y consulta de su custodia",
+    "route": "/usuarios",
+    "purpose": "Crea, modifica, desactiva cuentas y restablece contraseñas con auditoría.",
+    "steps": [
+      "Entre a Usuarios y pulse Agregar.",
+      "Ingrese nombre, correo, contraseña inicial, rol y parroquia cuando corresponda.",
+      "Guarde y entregue la contraseña mediante un canal privado.",
+      "Use Editar para cambios de rol o estado y Restablecer acceso para reemplazar una contraseña olvidada."
+    ],
+    "validations": "Mínimo 8 caracteres, máximo 72 bytes en el servidor. El párroco no asigna roles diocesanos. No se permite desactivar o degradar la propia cuenta. Cambios de rol, estado o contraseña invalidan sesiones mediante token_version.",
+    "result": "La cuenta puede autenticarse en su contexto, con los permisos de su rol.",
+    "errors": "Correo duplicado: revise la cuenta existente. Rol o parroquia no autorizados: utilice una cuenta con facultad real.",
+    "relations": "Roles, parroquias, autenticación y auditoría."
+  },
+  {
+    "key": "auditoria",
+    "title": "Auditoría",
+    "roles": "Administrador, auditor, canciller, secretario general y párroco por alcance",
+    "route": "/auditoria",
+    "purpose": "Consulta eventos producidos en el servidor y su trazabilidad.",
+    "steps": [
+      "Entre a Auditoría.",
+      "Pulse Actualizar auditoría después de una operación.",
+      "Revise fecha, usuario, evento, recurso, ID y resultado o detalle.",
+      "Use Anterior y Siguiente para recorrer las páginas."
+    ],
+    "validations": "La interfaz no permite editar ni borrar eventos. La auditoría se filtra por alcance. No se registran contraseñas ni cuerpos completos de solicitudes fallidas.",
+    "result": "Se identifica la actuación y el recurso relacionado sin alterar el historial.",
+    "errors": "Evento ausente: actualice y revise páginas, alcance y si la operación terminó correctamente.",
+    "relations": "Todos los módulos con acciones auditadas."
+  },
+  {
+    "key": "roles",
+    "title": "Roles y permisos",
+    "roles": "Todos consultan; solo administrador cambia capacidades editables",
+    "route": "/roles",
+    "purpose": "Muestra y administra capacidades persistentes de los siete roles.",
+    "steps": [
+      "Entre a Roles y permisos y seleccione un rol.",
+      "Revise las capacidades y los controles protegidos por el cargo.",
+      "Como administrador, cambie solo las capacidades editables y pulse Guardar permisos.",
+      "Use Descartar para abandonar cambios o Restablecer perfil y después Guardar para volver a predeterminados."
+    ],
+    "validations": "La lectura global y las facultades reservadas no pueden ampliarse a cargos no habilitados. Se comprueba revisión para evitar sobrescribir cambios concurrentes. La API aplica cambios en la siguiente petición; la interfaz refresca en hasta 30 segundos o al recuperar foco.",
+    "result": "Todas las cuentas del rol reciben la política efectiva sin cambiar de custodia.",
+    "errors": "Conflicto de revisión: recargue y concilie. Un control protegido no es un fallo de la interfaz.",
+    "relations": "Usuarios, dependencias de autorización y auditoría."
+  },
+  {
+    "key": "sacramentos",
+    "title": "Catálogo de partidas",
+    "roles": "Todos autenticados",
+    "route": "/sacramentos",
+    "purpose": "Consulta los cuatro tipos de partida inicializados por las migraciones.",
+    "steps": [
+      "Entre a Catálogo de partidas.",
+      "Revise el nombre y la descripción de cada tipo.",
+      "Utilice su nombre al crear libros y elegir el módulo sacramental."
+    ],
+    "validations": "La pantalla vigente es de consulta; no ofrece altas, modificación o eliminación de tipos.",
+    "result": "Se conoce el catálogo al que se vinculan libros y asientos.",
+    "errors": "Catálogo vacío: informe al administrador para verificar migraciones; no lo cargue duplicado manualmente.",
+    "relations": "Migraciones, libros y registros sacramentales."
+  },
+  {
+    "key": "respaldos",
+    "title": "Centro de respaldos",
+    "roles": "Solo administrador",
+    "route": "/respaldos",
+    "purpose": "Crea y verifica archivos ZIP que contienen una copia PostgreSQL y los documentos referenciados.",
+    "steps": [
+      "Entre a Respaldos y revise frecuencia y hora programada.",
+      "Pulse Crear respaldo y espere a completado.",
+      "Use Verificar para comprobar integridad y Descargar para conservar una copia externa.",
+      "Para programación, seleccione manual, diaria o semanal y guarde; conserve el programa abierto a la hora elegida."
+    ],
+    "validations": "Solo un trabajo simultáneo. Se valida cada documento y su hash. No se omiten archivos faltantes. La programación funciona mientras el SGD está abierto; no instala un servicio de Windows. La restauración es un procedimiento administrativo, no un botón que sobrescriba la base.",
+    "result": "Estado completado, tamaño, SHA-256 y fecha de verificación. Una copia debe probarse restaurando en una base nueva.",
+    "errors": "Falta pg_dump: instale las herramientas de línea de comandos de PostgreSQL 18. Fallido por documento: recupere el soporte correcto y repita.",
+    "relations": "PostgreSQL, documentos, configuración de respaldo, historial y recuperación."
+  },
+  {
+    "key": "configuracion",
+    "title": "Configuración de cuenta",
+    "roles": "Todos autenticados; libros según permiso",
+    "route": "/configuracion",
+    "purpose": "Cambia la contraseña personal y presenta los libros disponibles.",
+    "steps": [
+      "Entre a Configuración.",
+      "Ingrese Contraseña actual, Nueva contraseña y Confirmar contraseña.",
+      "Pulse Cambiar contraseña.",
+      "Vuelva a iniciar sesión con la nueva clave."
+    ],
+    "validations": "La confirmación debe coincidir; la contraseña nueva debe ser distinta. Mínimo 8 caracteres y máximo 72 bytes; los caracteres acentuados pueden ocupar más de un byte. El cambio revoca los tokens anteriores.",
+    "result": "La cuenta conserva su rol y custodia, y requiere una sesión nueva.",
+    "errors": "Contraseña actual incorrecta: no se cambia la clave. Sesión expirada después del cambio: vuelva a autenticarse.",
+    "relations": "Autenticación, sesiones, usuarios y libros."
+  },
+  {
+    "key": "verificacion",
+    "title": "Verificación pública del certificado",
+    "roles": "Sin iniciar sesión; solo metadatos mínimos",
+    "route": "/verificar/CODIGO",
+    "purpose": "Comprueba el estado del código o QR sin revelar nombres ni contenido sacramental.",
+    "steps": [
+      "Abra Verificar autenticidad desde el listado o lea el QR del PDF en el mismo equipo.",
+      "Compruebe el mensaje de validez.",
+      "Contraste número, fecha y parroquia con el documento."
+    ],
+    "validations": "El QR apunta a la dirección local de esta instalación. Desde otro equipo o teléfono no accede al servidor enlazado a 127.0.0.1. No es un portal público de Internet ni reemplaza una firma digital certificada.",
+    "result": "Firmado: válido y metadatos mínimos. Anulado o preparado: no válido. Código desconocido: no encontrado.",
+    "errors": "No abre en otro dispositivo: es el comportamiento del modo local. Un código inexistente no demuestra por sí mismo alteración del documento.",
+    "relations": "Certificados y estado de anulación."
+  }
+]

@@ -1,0 +1,29 @@
+SGD Diócesis de Tibú — distribución local para Windows x64
+
+Se incluye PostgreSQL 18.3 x64, Python oficial y sus bibliotecas,
+el backend existente y la interfaz React previamente compilada. El código fuente
+y las licencias de terceros acompañan el ZIP de entrega. No se otorga una licencia
+adicional sobre código del proyecto cuya titularidad corresponde a sus autores.
+
+Esta entrega para evaluadores incluye una copia autorizada de la base real
+parroquia, con sus 13 parroquias y la cuenta admin@iglesia.org ya registrada.
+El asistente restaura esa copia en una base nueva y conserva su contraseña.
+No contiene selector de demostración ni genera usuarios o partidas ficticias.
+Las sesiones del equipo de origen y los archivos operativos de respaldos no se
+transfieren. La copia anonimiza el nombre de la cuenta y los detalles históricos
+de auditoría, conservando relaciones y cantidades. No contiene partidas precargadas.
+
+La firma de certificados registra una actuación autenticada dentro del sistema.
+No se presenta como firma digital certificada por una entidad de certificación.
+El servidor se enlaza exclusivamente a 127.0.0.1. La verificación QR permanece local.
+
+Se ejecutaron pruebas en el equipo de desarrollo. Consulte el reporte para conocer
+su alcance. La instalación en una máquina virtual Windows limpia y el reinicio
+completo del sistema operativo requieren validación independiente y no se declaran
+comprobados mediante las pruebas locales.
+
+Actualizaciones y desinstalación conservan %LOCALAPPDATA%\SGD Tibu UDES\datos.
+Respalde base y documentos antes de actualizar; no comparta esa carpeta de datos.
+La cuenta admin@iglesia.org / admin123 es exclusiva de evaluación académica local.
+Nunca publique esta copia en red ni la adopte como instalación productiva.
+Avisos de PostgreSQL y sus componentes: carpeta postgresql de la aplicación.

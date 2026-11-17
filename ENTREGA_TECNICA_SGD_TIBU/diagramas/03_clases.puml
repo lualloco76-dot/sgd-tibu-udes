@@ -1,0 +1,128 @@
+@startuml
+hide methods
+skinparam classAttributeIconSize 0
+class Parroquia {
+ id: Integer
+ nombre: String
+ codigo: String
+ activa: Boolean
+ municipio: String
+ localidad: String
+ direccion: String
+ tipo: String
+}
+class Usuario {
+ id: Integer
+ email: String
+ password_hash: String
+ rol: String
+ activo: Boolean
+ token_version: Integer
+ intentos_fallidos: Integer
+ bloqueado_hasta: DateTime
+}
+class Sesion {
+ id: String
+ expira: DateTime
+ revocada: Boolean
+}
+class Persona {
+ id: Integer
+ nombres: String
+ apellidos: String
+ fecha_nacimiento: Date
+ numero_identificacion: String
+}
+class Sacramento {
+ id: Integer
+ nombre: String
+ descripcion: Text
+}
+class Libro {
+ id: Integer
+ numero: String
+}
+class RegistroSacramental {
+ id: Integer
+ fecha_celebracion: Date
+ libro: String
+ folio: String
+ numero: String
+ notas: Text
+ datos: JSON
+}
+class NotaMarginal {
+ id: Integer
+ fecha: DateTime
+ motivo: Text
+ anterior: JSON
+ posterior: JSON
+}
+class Solicitud {
+ id: Integer
+ estado: String
+ motivo: Text
+ decision_motivo: Text
+ fecha_creacion: DateTime
+ fecha_decision: DateTime
+}
+class Certificado {
+ id: Integer
+ numero: String
+ codigo_verificacion: String
+ fecha_emision: DateTime
+ instantanea: JSON
+ estado: String
+ requiere_aprobacion_curia: Boolean
+ motivo_curia: Text
+ fecha_autorizacion: DateTime
+ fecha_aprobacion_curia: DateTime
+ fecha_firma: DateTime
+}
+class Documento {
+ id: Integer
+ tipo_documento: String
+ nombre_archivo: String
+ ruta_archivo: String
+ hash_sha256: String
+}
+class Auditoria {
+ id: Integer
+ accion: String
+ entidad: String
+ entidad_id: Integer
+ fecha: DateTime
+ detalle: Text
+}
+Parroquia "0..1" -- "0..*" Usuario : pertenencia
+Parroquia "0..1" -- "0..*" Persona : custodia
+Parroquia "0..1" -- "0..*" RegistroSacramental : custodia
+Parroquia "1" -- "0..*" Libro
+Sacramento "1" -- "0..*" Libro
+Persona "1" -- "0..*" RegistroSacramental
+Sacramento "1" -- "0..*" RegistroSacramental
+Usuario "1" -- "0..*" Sesion
+RegistroSacramental "1" -- "0..*" Solicitud
+Parroquia "1" -- "0..*" Solicitud : origen
+Parroquia "1" -- "0..*" Solicitud : destino
+Usuario "1" -- "0..*" Solicitud : solicitante
+Usuario "0..1" -- "0..*" Solicitud : responsable
+RegistroSacramental "1" -- "0..*" Certificado
+Solicitud "0..1" -- "0..*" Certificado
+Usuario "1" -- "0..*" Certificado : preparador
+Usuario "0..1" -- "0..*" Certificado : autorizador
+Usuario "0..1" -- "0..*" Certificado : aprobador Curia
+Usuario "0..1" -- "0..*" Certificado : firmante
+Parroquia "1" -- "0..*" Certificado : custodia
+RegistroSacramental "1" -- "0..*" Documento
+Usuario "0..1" -- "0..*" Documento : subido_por
+RegistroSacramental "1" -- "0..*" NotaMarginal
+Usuario "1" -- "0..*" NotaMarginal : autor
+Usuario "0..1" -- "0..*" Auditoria
+Parroquia "0..1" -- "0..*" Auditoria
+note bottom of RegistroSacramental
+  Referencia única: parroquia + tipo + libro + folio + número.
+  Custodia NULL se conserva para legado no conciliado.
+  Libro se vincula por referencia validada, no por FK libro_id.
+end note
+@enduml

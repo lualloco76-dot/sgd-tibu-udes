@@ -1,0 +1,60 @@
+@startuml
+actor "Origen A" as A
+actor "Secretario custodiante B" as B
+actor "Párroco B" as P
+actor Canciller as C
+participant React as UI
+participant FastAPI as API
+participant "Sesión / rol / custodia" as Auth
+database PostgreSQL as DB
+participant "Servicio PDF" as PDF
+A -> UI : Buscar referencia y solicitar con motivo
+UI -> API : GET /registros/buscar\nPOST /solicitudes/
+API -> Auth : Validar sesión, rol y origen
+API -> DB : Guardar solicitud pendiente y auditoría
+API --> UI : Referencia mínima / solicitud
+B -> UI : Revisar y decidir
+UI -> API : POST /solicitudes/{id}/decision
+API -> Auth : Validar escritura y custodia destino
+API -> DB : Actualizar si pendiente + responsable / fecha / auditoría
+alt aprobada
+ API --> UI : Solicitud aprobada
+ B -> UI : Preparar certificado vinculado
+ UI -> API : POST /certificados/
+ API -> DB : Validar aprobación y guardar instantánea en preparado
+ API --> UI : Certificado preparado (sin descarga)
+ P -> UI : Autorizar
+ UI -> API : POST /certificados/{id}/autorizar
+ API -> Auth : Párroco de custodia
+ API -> DB : preparado -> autorizado + autor / fecha / auditoría
+ alt competencia de Curia
+  C -> UI : Aprobar en Curia
+  UI -> API : POST /certificados/{id}/aprobar-curia
+  API -> Auth : Solo canciller
+  API -> DB : autorizado -> aprobado_curia + autor / fecha
+  C -> UI : Firmar
+  UI -> API : POST /certificados/{id}/firmar
+  API -> Auth : Canciller / aprobado_curia / requiere Curia
+ else trámite ordinario
+  P -> UI : Firmar
+  UI -> API : POST /certificados/{id}/firmar
+  API -> Auth : Párroco custodio / autorizado / sin Curia
+ end
+ API -> DB : firmado + firmante / fecha / auditoría
+ A -> UI : Descargar
+ UI -> API : GET /certificados/{id}/pdf
+ API -> Auth : Estado firmado y origen de solicitud aprobada
+ API -> PDF : Generar PDF desde instantánea con QR
+ PDF --> API : PDF
+ API -> DB : Auditar descarga
+ API --> UI : PDF autenticado
+else rechazada
+ API --> UI : Rechazada con motivo, responsable y fecha
+ note over UI, API : No habilita preparación vinculada ni entrega
+end
+note over API, DB
+ Rutas relativas a /api.
+ Cada actuación es una transacción independiente.
+ Transiciones repetidas o concurrentes incompatibles: 409.
+end note
+@enduml

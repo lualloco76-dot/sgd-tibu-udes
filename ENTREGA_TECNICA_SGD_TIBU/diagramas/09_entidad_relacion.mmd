@@ -1,0 +1,158 @@
+erDiagram
+  parroquias {
+    INTEGER id PK
+    VARCHAR nombre
+    VARCHAR codigo
+    BOOLEAN activa
+    VARCHAR municipio
+    VARCHAR localidad
+    VARCHAR direccion
+    VARCHAR tipo
+  }
+  sacramentos {
+    INTEGER id PK
+    VARCHAR nombre
+    TEXT descripcion
+  }
+  libros {
+    INTEGER id PK
+    INTEGER parroquia_id FK
+    INTEGER sacramento_id FK
+    VARCHAR numero
+  }
+  parroquias ||--o{ libros : "parroquia_id"
+  sacramentos ||--o{ libros : "sacramento_id"
+  personas {
+    INTEGER id PK
+    VARCHAR nombres
+    VARCHAR apellidos
+    DATE fecha_nacimiento
+    VARCHAR lugar_nacimiento
+    VARCHAR numero_identificacion
+    VARCHAR telefono
+    VARCHAR email
+    INTEGER parroquia_id FK
+  }
+  parroquias |o--o{ personas : "parroquia_id"
+  usuarios {
+    INTEGER id PK
+    VARCHAR nombre
+    VARCHAR email
+    VARCHAR password_hash
+    VARCHAR rol
+    BOOLEAN activo
+    INTEGER parroquia_id FK
+    INTEGER token_version
+    INTEGER intentos_fallidos
+    DATETIME bloqueado_hasta
+  }
+  parroquias |o--o{ usuarios : "parroquia_id"
+  auditoria {
+    INTEGER id PK
+    INTEGER usuario_id FK
+    VARCHAR accion
+    VARCHAR entidad
+    INTEGER entidad_id
+    DATETIME fecha
+    TEXT detalle
+    INTEGER parroquia_id FK
+  }
+  usuarios |o--o{ auditoria : "usuario_id"
+  parroquias |o--o{ auditoria : "parroquia_id"
+  registros_sacramentales {
+    INTEGER id PK
+    INTEGER persona_id FK
+    INTEGER sacramento_id FK
+    DATE fecha_celebracion
+    VARCHAR lugar
+    VARCHAR ministro
+    VARCHAR libro
+    VARCHAR folio
+    VARCHAR numero
+    TEXT notas
+    INTEGER parroquia_id FK
+    JSON datos
+  }
+  personas ||--o{ registros_sacramentales : "persona_id"
+  sacramentos ||--o{ registros_sacramentales : "sacramento_id"
+  parroquias |o--o{ registros_sacramentales : "parroquia_id"
+  sesiones {
+    VARCHAR id PK
+    INTEGER usuario_id FK
+    DATETIME expira
+    BOOLEAN revocada
+  }
+  usuarios ||--o{ sesiones : "usuario_id"
+  documentos {
+    INTEGER id PK
+    INTEGER registro_id FK
+    VARCHAR tipo_documento
+    VARCHAR nombre_archivo
+    VARCHAR ruta_archivo
+    VARCHAR hash_sha256
+    DATETIME fecha_subida
+    INTEGER subido_por FK
+  }
+  registros_sacramentales ||--o{ documentos : "registro_id"
+  usuarios |o--o{ documentos : "subido_por"
+  notas_marginales {
+    INTEGER id PK
+    INTEGER registro_id FK
+    INTEGER usuario_id FK
+    DATETIME fecha
+    TEXT motivo
+    JSON anterior
+    JSON posterior
+  }
+  registros_sacramentales ||--o{ notas_marginales : "registro_id"
+  usuarios ||--o{ notas_marginales : "usuario_id"
+  solicitudes {
+    INTEGER id PK
+    INTEGER registro_id FK
+    INTEGER origen_id FK
+    INTEGER destino_id FK
+    INTEGER solicitante_id FK
+    VARCHAR estado
+    TEXT motivo
+    TEXT decision_motivo
+    INTEGER responsable_id FK
+    DATETIME fecha_creacion
+    DATETIME fecha_decision
+    BOOLEAN requiere_aprobacion_curia
+    INTEGER aprobado_curia_por FK
+    DATETIME fecha_aprobacion_curia
+    TEXT motivo_curia
+  }
+  registros_sacramentales ||--o{ solicitudes : "registro_id"
+  parroquias ||--o{ solicitudes : "origen_id"
+  parroquias ||--o{ solicitudes : "destino_id"
+  usuarios ||--o{ solicitudes : "solicitante_id"
+  usuarios |o--o{ solicitudes : "responsable_id"
+  usuarios |o--o{ solicitudes : "aprobado_curia_por"
+  certificados {
+    INTEGER id PK
+    VARCHAR numero
+    INTEGER registro_id FK
+    INTEGER solicitud_id FK
+    INTEGER emitido_por FK
+    INTEGER parroquia_id FK
+    VARCHAR codigo_verificacion
+    DATETIME fecha_emision
+    JSON instantanea
+    VARCHAR estado
+    INTEGER autorizado_por FK
+    DATETIME fecha_autorizacion
+    BOOLEAN requiere_aprobacion_curia
+    INTEGER aprobado_curia_por FK
+    DATETIME fecha_aprobacion_curia
+    TEXT motivo_curia
+    INTEGER firmado_por FK
+    DATETIME fecha_firma
+  }
+  registros_sacramentales ||--o{ certificados : "registro_id"
+  solicitudes |o--o{ certificados : "solicitud_id"
+  usuarios ||--o{ certificados : "emitido_por"
+  parroquias ||--o{ certificados : "parroquia_id"
+  usuarios |o--o{ certificados : "autorizado_por"
+  usuarios |o--o{ certificados : "aprobado_curia_por"
+  usuarios |o--o{ certificados : "firmado_por"

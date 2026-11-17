@@ -1,0 +1,6 @@
+-r ../backend/requirements.txt
+Pillow==13.0.0
+python-docx==1.2.0
+openpyxl==3.1.5
+pytest==9.2.0
+httpx==0.28.1

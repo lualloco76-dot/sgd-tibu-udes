@@ -1,0 +1,34 @@
+@startuml
+title Topología prevista; no acredita despliegue productivo
+node "Equipo administrativo" as Client {
+ artifact "Navegador" as Browser
+}
+node "Servidor web autorizado" as Web {
+ node "Proxy HTTPS / estáticos" as Proxy {
+  artifact "Build React" as React
+ }
+ node "Proceso Uvicorn" as Runtime {
+  artifact "Aplicación FastAPI" as FastAPI
+ }
+ folder "Almacenamiento persistente\npermisos restringidos" as Files {
+  artifact "PDF adjuntos" as PDFs
+ }
+}
+node "Servidor de datos restringido" as Data {
+ database "PostgreSQL" as PG
+}
+node "Respaldo protegido" as Backup {
+ artifact "BD + archivos + configuración" as Copies
+}
+Browser --> Proxy : HTTPS
+Proxy --> Runtime : HTTP interno /api
+FastAPI --> PG : conexión autorizada / TLS según entorno
+FastAPI --> Files : acceso local restringido
+Data ..> Copies : respaldo operativo
+Files ..> Copies : respaldo consistente
+note bottom of Web
+  Desarrollo local: React :3000 y API :8000.
+  Pruebas: BD sintética y esquemas aislados.
+  Producción requiere aprobación independiente.
+end note
+@enduml

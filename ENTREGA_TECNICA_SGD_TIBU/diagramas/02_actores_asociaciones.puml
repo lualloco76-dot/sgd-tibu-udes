@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+actor Administrador as A
+actor Párroco as P
+actor "Secretario parroquial" as S
+actor "Secretario general" as G
+actor Canciller as C
+actor Auditor as AU
+actor Consulta as Q
+rectangle "Competencias del SGD (sin herencia entre roles)" {
+ usecase "Escritura parroquial\nsegún custodia" as E
+ usecase "Preparación técnica\nde certificados" as T
+ usecase "Autorizar certificado\nde propia custodia" as O
+ usecase "Aprobar Curia" as AC
+ usecase "Firmar / anular\nsegún estado y competencia" as F
+ usecase "Control de auditoría\ny reportes globales" as R
+ usecase "Administrar cuentas\nsegún alcance" as U
+ usecase "Lectura parroquial" as L
+}
+A -- E
+P -- E
+S -- E
+A -- T
+P -- T
+S -- T
+G -- T
+C -- T
+P -- O
+C -- AC
+P -- F
+C -- F
+A -- R
+G -- R
+C -- R
+AU -- R
+A -- U
+P -- U
+Q -- L
+note bottom of R
+ El auditor no obtiene lectura de registros históricos
+ sin custodia por tener parroquia_id NULL.
+ El párroco consulta auditoría de su parroquia.
+end note
+@enduml

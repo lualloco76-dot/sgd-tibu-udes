@@ -1,0 +1,49 @@
+@startuml
+|Parroquia origen|
+start
+:Iniciar sesión y buscar referencia externa exacta;
+:Enviar solicitud con motivo;
+|Sistema|
+:Validar origen y custodiante; guardar pendiente;
+|Custodiante|
+:Revisar solicitud;
+if (¿Aprueba?) then (sí)
+ :Aprobar con motivo;
+ |Sistema|
+ :Registrar responsable, fecha y auditoría;
+ |Preparador autorizado|
+ :Preparar certificado vinculado;
+ :Indicar competencia de Curia y motivo si corresponde;
+ |Sistema|
+ :Conservar instantánea; estado preparado;
+ |Párroco custodio|
+ :Autorizar certificado;
+ |Sistema|
+ :Registrar autorización; estado autorizado;
+ if (¿Requiere Curia?) then (sí)
+  |Canciller|
+  :Aprobar en Curia;
+  |Sistema|
+  :Estado aprobado_curia y trazabilidad;
+  |Canciller|
+  :Firmar certificado de Curia;
+ else (no)
+  |Párroco custodio|
+  :Firmar certificado ordinario;
+ endif
+ |Sistema|
+ :Estado firmado; registrar firmante / fecha;
+ |Parroquia origen|
+ :Solicitar descarga;
+ |Sistema|
+ :Validar acceso, generar PDF/QR y auditar;
+ |Parroquia origen|
+ :Recibir documento y verificar QR;
+else (no)
+ |Custodiante|
+ :Rechazar con motivo;
+ |Sistema|
+ :Registrar decisión terminal y bloquear entrega vinculada;
+endif
+stop
+@enduml
